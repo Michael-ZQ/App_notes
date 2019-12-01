@@ -20,6 +20,7 @@ app.engine('.hbos',exphbs({
 app.set('view engine','.hbs'); // configurando las views
 
 
+
 //middlewares
 app.use(express.urlencoded({extended: false}));  // para entender datos de un formulario
 app.use(methodOverride('_method')); //sire para que los ofmularios puedan enviar otros tipos de metodos no solo get 
