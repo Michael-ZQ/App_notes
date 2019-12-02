@@ -11,7 +11,7 @@ require('./database');
 //setings
 app.set('port', process.env.PORT  || 3000);
 app.set('views', path.join(__dirname, 'views'));
-app.engine('.hbos',exphbs({
+app.engine('.hbs',exphbs({ 
     defaultLayout:'main',
     layoutsDir: path.join(app.get('views'), 'layouts'),
     partialsDir:path.join(app.get('views'), 'partials'),
@@ -28,7 +28,7 @@ app.use(session({
     secret:'mysecret',
     resave: true,
     saveUninitialized: true
-})); // configuraciones por default , para que expres puedda allmazener lso datos temporalmente 
+})); // configuraciones por default , para que express pueda allmazener los datos temporalmente 
 
 
 
