@@ -17,9 +17,11 @@
 
 <body>
 
-    <p>Navigation</p>
-    <main class="container">
+    {{> navigate}}
+    
+    <main class="container p-4">
         {{> messages}}
+        {{> errors}}
         {{{body}}}
 
     </main>

@@ -2,12 +2,13 @@ const express = require('express');
 const router = express.Router();
 
 const Note = require('../models/Note');
+const { isAuthenticated } = require('../helpers/auth');
 
-router.get('/notes/add', (req, res) => {
+router.get('/notes/add', isAuthenticated, (req, res) => {
    res.render('notes/addNotes');
 });
 
-router.post('/notes/addNotes', async (req, res) => {
+router.post('/notes/addNotes',isAuthenticated , async (req, res) => {
    const { title, description } = req.body;
    const errors = [];
    if (!title) {
@@ -25,6 +26,7 @@ router.post('/notes/addNotes', async (req, res) => {
       });
    } else {
       const NewNote = new Note({ title, description });
+      NewNote.user = req.user.id;
       await NewNote.save();
       req.flash('success_msg', 'Note Added Successfull');
       res.redirect('/notes')
@@ -37,17 +39,17 @@ enviados por un formulario cuyo método de envío es post. Es adecuado para form
 Los datos no son visibles.
 */
 
-router.get('/notes', async (req, res) => {
-   const notes = await Note.find().sort({ Date: 'desc' });
+router.get('/notes',isAuthenticated , async (req, res) => {
+   const notes = await Note.find({user: req.user.id}).sort({ Date: 'desc' });
    res.render('notes/all_notes', { notes });
 });
 
-router.get('/notes/edit/:id', async (req, res) => {
+router.get('/notes/edit/:id',isAuthenticated, async (req, res) => {
    const note = await Note.findById(req.params.id)
    res.render('notes/edit_note', { note });
 });
 
-router.put('/notes/edit_note/:id', async (req, res) => {
+router.put('/notes/edit_note/:id',isAuthenticated, async (req, res) => {
    const { title, description } = req.body;
    await Note.findByIdAndUpdate(req.params.id, { title, description });
    req.flash('success_msg', 'Nota Updated Successfull');
@@ -55,7 +57,7 @@ router.put('/notes/edit_note/:id', async (req, res) => {
 
 });
 
-router.delete('/notes/delete/:id', async (req, res)=>{
+router.delete('/notes/delete/:id',isAuthenticated, async (req, res)=>{
   await Note.findByIdAndDelete(req.params.id);
   req.flash('success_msg', 'Nota Delete Successfull');
 
